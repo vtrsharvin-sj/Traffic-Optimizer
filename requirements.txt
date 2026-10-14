@@ -1,0 +1,51 @@
+# =============================================================================
+# Core — required for the network simulator (streamlit run app.py)
+# =============================================================================
+streamlit>=1.30.0
+networkx>=3.1
+numpy>=1.24.0
+pandas>=2.0.0
+plotly>=5.18.0
+folium>=0.15.0
+streamlit-folium>=0.18.0
+
+# Loads secrets (e.g. Twilio creds) from the .env file — see README "Secrets"
+python-dotenv>=1.0.0
+
+
+# =============================================================================
+# OPTIONAL — live YOLO detection (streamlit run live_app.py)
+# Heavy deps; only needed for the real-time video detection features.
+# =============================================================================
+ultralytics>=8.2.0
+opencv-python>=4.8.0
+lap>=0.5.12          # required by the ByteTrack tracker
+# ncnn               # required by the accident model (accident_ncnn_model/):
+#                    #   pip install ncnn
+
+# --- GPU acceleration (RTX / CUDA), optional --------------------------------
+# Install CUDA-enabled PyTorch SEPARATELY so you get the GPU build, e.g. for a
+# Blackwell RTX 5080 (CUDA 12.8):
+#   pip install --index-url https://download.pytorch.org/whl/cu128 torch torchvision
+# For TensorRT .engine export/inference (biggest speedup), also:
+#   pip install tensorrt
+# The app auto-detects CUDA and auto-exports a local yolo11s.engine on first run.
+
+
+# =============================================================================
+# OPTIONAL — accident SMS alerts (alerts.py)
+# =============================================================================
+twilio>=8.0.0
+
+
+# =============================================================================
+# OPTIONAL — quantum QAOA path (quantum_optimizer.py)
+# QAOA needs the qiskit 1.x line (qiskit + qiskit-aer + qiskit-optimization +
+# qiskit-algorithms). On qiskit 2.x the app transparently falls back to
+# classical simulated annealing because qiskit.primitives.Sampler was removed,
+# so these lines are not strictly required. See README "Quantum / QAOA note".
+# =============================================================================
+qiskit>=1.0.0,<2.0.0
+qiskit-aer>=0.14.0
+qiskit-optimization>=0.6.0
+qiskit-algorithms>=0.3.0
