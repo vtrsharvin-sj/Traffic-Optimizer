@@ -20,3 +20,6 @@ traffic_logs.csv
 
 # Loose test videos
 *.mp4
+
+# Agent / workflow scaffolding
+.agents/
