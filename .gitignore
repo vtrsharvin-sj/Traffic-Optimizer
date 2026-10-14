@@ -1,0 +1,22 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large model / build artifacts
+wheels/
+*.engine
+
+# Generated data
+accident_snapshots/
+speed_violations/
+redlight_violations/
+traffic_log.json
+traffic_logs.csv
+
+# Loose test videos
+*.mp4
