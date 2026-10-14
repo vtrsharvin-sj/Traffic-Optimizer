@@ -1,0 +1,29 @@
+{
+  "id": "FEAT-001",
+  "type": "docs",
+  "description": "Reconcile documentation and dependencies with the actual code: rewrite README.md to describe only real features and files, and fix requirements.txt so the quantum extras are installable while optional/heavy deps are clearly labelled. No source-module behavior changes. Independent of FEAT-002 (edits different files), but ordered first because the README should describe the repo as it will finally ship.",
+  "status": "completed",
+  "steps": [
+    "Edit README.md: delete the entire 'Traffic chatbot (Featherless AI)' section and every reference to chatbot.py, FEATHERLESS_API_KEY, openai, and the empty pages/ directory. Verified by grep that none of these exist in code.",
+    "Edit README.md 'Project layout' table so it lists the files that actually exist: add live_app.py, config.py, logger.py, alerts.py, model_loader.py, video_detector.py, signal_controller.py, simple_tracker.py, speed_tracker.py, savings_predictor.py, live_intersection.py, and the accident_ncnn_model/ folder; keep app.py, traffic_network.py, quantum_optimizer.py, classical_baseline.py, emergency.py, events.py, environmental.py, requirements.txt.",
+    "Edit README.md to keep and accurately describe the genuinely-present features: two Streamlit apps (streamlit run app.py = NetworkX simulator + Folium map; streamlit run live_app.py = live YOLO detection on four videos), QUBO/QAOA optimizer in quantum_optimizer.py with classical simulated-annealing fallback, adaptive signal controller (signal_controller.py AdaptiveSignalController), emergency green corridor (emergency.py), accident detection via accident_ncnn_model/ + optional Twilio SMS (alerts.py), speed violations (speed_tracker.py / simple_tracker.py), JSON+CSV logging (logger.py). Keep the Windows PowerShell + venv setup block and the run commands.",
+    "Add to README.md a plain note that the QAOA path requires the qiskit 1.x stack (qiskit, qiskit-aer, qiskit-optimization, qiskit-algorithms); on qiskit 2.x it transparently falls back to classical annealing because qiskit.primitives.Sampler was removed. Add a short 'Secrets' subsection: copy .env.example to .env, fill Twilio creds, never commit .env.",
+    "Edit requirements.txt: add 'qiskit-algorithms>=0.3.0' to the optional quantum block; add a comment that QAOA needs the qiskit 1.x line and otherwise annealing fallback runs; group/label heavy & optional deps (torch/ultralytics, opencv-python, ncnn, twilio, qiskit*) as optional-for-full-features. Do NOT remove any dependency the code imports. There is no openai/chatbot dependency to remove (it was never present).",
+    "Do NOT modify quantum_optimizer.py or any other .py module in this feature."
+  ],
+  "acceptance_criteria": [
+    "Select-String -Path README.md -Pattern 'chatbot|Featherless|FEATHERLESS|openai|pages/' returns zero matches.",
+    "README.md still contains both 'streamlit run app.py' and 'streamlit run live_app.py'.",
+    "README.md Project layout table lists live_app.py, config.py, logger.py, alerts.py, video_detector.py, signal_controller.py, savings_predictor.py (at minimum) in addition to the original files.",
+    "requirements.txt contains a 'qiskit-algorithms' line within the quantum block and still lists ultralytics, opencv-python, twilio, python-dotenv.",
+    "No .py source module is modified by this feature."
+  ],
+  "verification": [
+    "PowerShell: if (Select-String -Path README.md -Pattern 'chatbot|Featherless|FEATHERLESS|openai|pages/' -Quiet) { Write-Error 'stale refs remain' } else { 'README clean' }",
+    "PowerShell: Select-String -Path README.md -Pattern 'streamlit run app.py','streamlit run live_app.py' | Measure-Object  (expect 2+ matches)",
+    "PowerShell: Select-String -Path requirements.txt -Pattern 'qiskit-algorithms'  (expect a match)",
+    "python -c \"import ultralytics, cv2, twilio, dotenv, networkx, folium, streamlit_folium, plotly; print('core deps import')\""
+  ],
+  "blocked_reason": null,
+  "findings": "README.md fully rewritten: removed the chatbot/Featherless section, all openai/chatbot.py/FEATHERLESS_API_KEY references, and the empty pages/ dir mention. Project layout table now lists every real module (app.py, live_app.py, traffic_network.py, quantum_optimizer.py, classical_baseline.py, emergency.py, events.py, environmental.py, config.py, logger.py, alerts.py, model_loader.py, video_detector.py, signal_controller.py, simple_tracker.py, speed_tracker.py, savings_predictor.py, live_intersection.py, accident_ncnn_model/, requirements.txt). Added a 'Quantum / QAOA note' explaining QAOA needs the qiskit 1.x stack (qiskit, qiskit-aer, qiskit-optimization, qiskit-algorithms) and that qiskit 2.x falls back to classical annealing, plus a 'Secrets' subsection (copy .env.example to .env, fill Twilio creds, never commit .env). Both 'streamlit run app.py' and 'streamlit run live_app.py' retained. requirements.txt: added 'qiskit-algorithms>=0.3.0' to the quantum block (and pinned qiskit<2.0.0 since QAOA needs the 1.x line), grouped/labelled core vs optional-heavy deps (ultralytics/opencv/ncnn, twilio, qiskit*); no dependency the code imports was removed; there was no openai/chatbot dep. No .py source module modified. Verification: README clean of stale refs; 4 run-command matches; qiskit-algorithms present; core deps import OK. NOTE for later steps: .gitignore still needs redlight_violations/ and *.mp4 added (FEAT-002 scope); pages/, redlight_violations/, accident_snapshots/, speed_violations/ dirs still present in working tree (FEAT-002 cleanup)."
+}
