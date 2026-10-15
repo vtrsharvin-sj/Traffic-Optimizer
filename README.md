@@ -128,17 +128,6 @@ Keep API credentials in `.env`. This file is excluded from Git.
 
 Logs go to `runtime/logs/`, accident images to `runtime/accident_snapshots/`, and speed-alert images to `runtime/speed_violations/`. Videos and generated results stay local and are not committed to Git.
 
-## Need help?
-
-| Problem | Try this |
-| --- | --- |
-| PowerShell blocks environment activation | Use `.\.venv\Scripts\python.exe` instead of `python` in the install and run commands. |
-| A video is missing | Check all four file paths in the sidebar. |
-| Vehicle model not found | Check that `models/yolo11s.pt` exists. |
-| Accident detection does not start | Install `ncnn` and check the West video path. |
-| Video processing is slow | Reduce `IMG_SIZE` in the configuration file. |
-| Quantum mode is unavailable | Continue with the classical solver, or follow the [quantum setup notes](docs/SETUP.md). |
-
 ## For contributors
 
 Run the checks from the project folder:
