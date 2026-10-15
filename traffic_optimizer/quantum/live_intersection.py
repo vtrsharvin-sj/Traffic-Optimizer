@@ -28,8 +28,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-from quantum_optimizer import QUBO, OptResult, solve_annealing, solve_qaoa, \
-    QISKIT_AVAILABLE
+from traffic_optimizer.quantum.quantum_optimizer import (QUBO, OptResult,
+                                                        solve_annealing,
+                                                        solve_qaoa,
+                                                        QISKIT_AVAILABLE)
 
 
 PHASE_NAME = {0: "North-South", 1: "East-West"}

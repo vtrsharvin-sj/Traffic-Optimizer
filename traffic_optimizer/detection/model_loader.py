@@ -21,7 +21,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-import config
+from traffic_optimizer.core import config
 
 
 @dataclass

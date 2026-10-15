@@ -1,7 +1,7 @@
 """
 signal_controller.py
 --------------------
-Deployment-grade adaptive traffic signal controller for a real 4-way
+Demonstration adaptive traffic signal controller for a 4-way
 intersection. ONE approach is green at a time (North / South / East / West);
 the other three are RED, with proper GREEN -> YELLOW -> ALL-RED clearance.
 
@@ -26,7 +26,7 @@ order and fresh timings from the latest counts.
 Emergency vehicles preempt: the emergency approach is moved to the front and
 gets served immediately (cutting the current green to yellow if needed).
 
-All timing constants are realistic and tunable for deployment.
+Timing constants are configurable; field deployment requires separate validation.
 """
 
 from __future__ import annotations

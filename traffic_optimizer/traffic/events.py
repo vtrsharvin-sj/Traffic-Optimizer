@@ -16,7 +16,7 @@ from __future__ import annotations
 import random
 from typing import List, Tuple
 
-from traffic_network import TrafficNetwork
+from traffic_optimizer.traffic.traffic_network import TrafficNetwork
 
 
 EVENT_TYPES = ["none", "congestion", "accident", "road_closure", "emergency"]

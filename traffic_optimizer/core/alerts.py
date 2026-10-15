@@ -17,7 +17,7 @@ import time
 from datetime import datetime
 from typing import Dict
 
-import config
+from traffic_optimizer.core import config
 
 _LAST_SENT: Dict[str, float] = {}          # accident cooldown per direction
 _LAST_CONGESTION: Dict[str, float] = {}    # congestion cooldown per direction

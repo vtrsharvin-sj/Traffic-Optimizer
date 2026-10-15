@@ -19,7 +19,7 @@ from typing import List
 
 import networkx as nx
 
-from traffic_network import TrafficNetwork
+from traffic_optimizer.traffic.traffic_network import TrafficNetwork
 
 
 FREE_FLOW_TIME = 20.0  # seconds to cross a road with no traffic

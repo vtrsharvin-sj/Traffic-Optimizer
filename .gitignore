@@ -23,3 +23,14 @@ traffic_logs.csv
 
 # Agent / workflow scaffolding
 .agents/
+
+# Local runtime and tooling
+runtime/
+.pytest_cache/
+.coverage
+htmlcov/
+.env.*
+!.env.example
+*.avi
+*.mov
+*.mkv

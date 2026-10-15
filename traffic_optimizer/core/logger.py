@@ -29,13 +29,13 @@ import threading
 from datetime import datetime
 from typing import Any, Dict, List
 
-import config
+from traffic_optimizer.core import config
 
 _lock = threading.Lock()
 _events: List[Dict[str, Any]] = []
 
-JSON_PATH = os.path.join(config.BASE_DIR, "traffic_log.json")
-CSV_PATH = os.path.join(config.BASE_DIR, "traffic_logs.csv")
+JSON_PATH = os.path.join(config.LOG_DIR, "traffic_log.json")
+CSV_PATH = os.path.join(config.LOG_DIR, "traffic_logs.csv")
 _MAX_JSON = 5000
 
 
@@ -65,6 +65,7 @@ def _load_existing_json() -> None:
             pass
 
 
+os.makedirs(config.LOG_DIR, exist_ok=True)
 _ensure_csv_header()
 _load_existing_json()
 
@@ -85,10 +86,13 @@ def log_event(event_type: str, direction: str,
 
     with _lock:
         _events.append(event)
+        del _events[:-_MAX_JSON]
         # rewrite JSON (trimmed) so it is always valid
         try:
-            with open(JSON_PATH, "w", encoding="utf-8") as f:
-                json.dump(_events[-_MAX_JSON:], f, indent=2)
+            temporary = JSON_PATH + ".tmp"
+            with open(temporary, "w", encoding="utf-8") as f:
+                json.dump(_events, f, indent=2)
+            os.replace(temporary, JSON_PATH)
         except Exception as exc:
             print(f"[logger] JSON write failed: {exc}")
         # append CSV row

@@ -31,12 +31,13 @@ from datetime import datetime
 import cv2
 import numpy as np
 
-import config
-from model_loader import load_model, describe, LoadedModel
-from alerts import send_accident_sms
-from speed_tracker import SpeedTracker
-from simple_tracker import CentroidTracker
-import logger
+from traffic_optimizer.core import config
+from traffic_optimizer.detection.model_loader import (load_model, describe,
+                                                      LoadedModel)
+from traffic_optimizer.core.alerts import send_accident_sms
+from traffic_optimizer.detection.speed_tracker import SpeedTracker
+from traffic_optimizer.detection.simple_tracker import CentroidTracker
+from traffic_optimizer.core import logger
 
 # COCO vehicle class ids: 2 car, 3 motorcycle, 5 bus, 7 truck
 VEHICLE_CLASSES = [2, 3, 5, 7]

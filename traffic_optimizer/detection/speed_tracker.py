@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
-import config
+from traffic_optimizer.core import config
 
 
 @dataclass

@@ -1,0 +1,6 @@
+# Isolated legacy V1 sampler stack; install with Python 3.11.
+-r base.txt
+qiskit>=1.2,<2
+qiskit-aer>=0.15,<0.17
+qiskit-optimization>=0.6,<0.7
+qiskit-algorithms>=0.3,<0.4

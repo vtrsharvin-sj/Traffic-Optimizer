@@ -35,7 +35,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from traffic_network import TrafficNetwork
+from traffic_optimizer.traffic.traffic_network import TrafficNetwork
 
 
 # --------------------------------------------------------------------------- #
@@ -43,7 +43,7 @@ from traffic_network import TrafficNetwork
 # --------------------------------------------------------------------------- #
 QISKIT_AVAILABLE = False
 try:
-    from qiskit_aer.primitives import SamplerV2 as AerSampler  # type: ignore
+    from qiskit_aer.primitives import Sampler as AerSampler  # type: ignore
     from qiskit_optimization import QuadraticProgram  # type: ignore
     from qiskit_optimization.algorithms import MinimumEigenOptimizer  # type: ignore
     from qiskit_algorithms import QAOA  # type: ignore
@@ -129,15 +129,14 @@ def build_qubo(net: TrafficNetwork,
     #    strong linear bias so the optimizer keeps those greens open.
     if emergency_path:
         for a, b in zip(emergency_path, emergency_path[1:]):
+            if a not in index or b not in index:
+                continue
+            start, end = net.intersections[a], net.intersections[b]
+            prefer_ew = abs(start.lon - end.lon) > abs(start.lat - end.lat)
             for n in (a, b):
                 if n not in index:
                     continue
                 i = index[n]
-                ns, ew = net.phase_load(n)
-                node = net.intersections[n]
-                nb = net.intersections[b]
-                # decide corridor direction between a and b
-                prefer_ew = abs(node.lon - nb.lon) >= abs(node.lat - nb.lat)
                 if prefer_ew:
                     linear[i] -= lambda_emerg   # push x_i -> 1 (EW green)
                 else:
@@ -172,6 +171,8 @@ def solve_annealing(qubo: QUBO, iters: int = 4000,
     cur = qubo.energy(bits)
     best_bits = dict(bits)
     best_e = cur
+    if n == 0:
+        return OptResult({}, cur, "Simulated Annealing (classical fallback)")
     for step in range(iters):
         t = max(0.01, 1.0 - step / iters)
         i = rng.randrange(n)
@@ -208,7 +209,7 @@ def solve_qaoa(qubo: QUBO, reps: int = 2, seed: int = 42) -> OptResult:
     qp.minimize(linear=linear, quadratic=quadratic, constant=qubo.offset)
 
     try:
-        sampler = AerSampler()
+        sampler = AerSampler(run_options={"seed": seed})
     except Exception:
         sampler = RefSampler()
 

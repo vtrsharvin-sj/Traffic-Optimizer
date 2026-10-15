@@ -18,8 +18,8 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Dict
 
-from traffic_network import TrafficNetwork
-from quantum_optimizer import OptResult
+from traffic_optimizer.traffic.traffic_network import TrafficNetwork
+from traffic_optimizer.quantum.quantum_optimizer import OptResult
 
 
 # Simple physical constants for the idle-emission model.
